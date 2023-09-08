@@ -1,7 +1,7 @@
 import json
 import logging
 
-from aws_lambda_typing import context as lambda_context, events
+from aws_lambda_typing import context as lambda_context, events, responses
 
 import boto3
 import requests
@@ -56,10 +56,12 @@ def invite_email(email: str) -> dict:
         "channels": ",".join(CHANNELS),
     }
     r = requests.get(url, params=payload)
-    return r.json()
+    return r.json()_
 
 
-def handler(event: events.APIGatewayProxyEventV1, context: lambda_context):
+def handler(
+    event: events.APIGatewayProxyEventV1, context: lambda_context
+) -> responses.APIGatewayProxyResponseV1:
     try:
         logger.info(event)
         # Generate random image id
