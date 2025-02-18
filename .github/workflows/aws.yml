@@ -2,14 +2,14 @@ name: Deploy CDK Project
 on:
   push:
     tags:
-      - '**'
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-    types:
-      - closed
+      - 'v*'
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+#     types:
+#       - closed
 
 jobs:
   deployment:
