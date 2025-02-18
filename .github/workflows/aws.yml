@@ -43,6 +43,8 @@ jobs:
         run: uv sync --all-extras --dev --python-preference only-system
       - name: uv to requirements.txt
         run: uv export --project pyproject.toml --no-emit-project > infrastructure/requirements.txt
+      - name: check requirements
+        run: cat infrastructure/requirements.txt
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:

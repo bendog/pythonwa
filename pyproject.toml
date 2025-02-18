@@ -3,7 +3,7 @@ name = "pythonwa"
 version = "3.1.5"
 description = "PythonWA website"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<3.14"
 
 dependencies = [
     "aiofiles~=23.2.1",
