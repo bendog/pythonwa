@@ -1,6 +1,6 @@
 [project]
 name = "pythonwa"
-version = "3.1.2"
+version = "3.1.3"
 description = "PythonWA website"
 readme = "README.md"
 requires-python = ">=3.13"

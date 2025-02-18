@@ -28,15 +28,19 @@ jobs:
       - name: npm build
         working-directory: ./frontend
         run: npm run build
-      - name: Set up Python 3.13
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.13
-          cache: pip
-      - name: Install pipenv
-        run: pip install pipenv
-      - name: pipenv to requirements.txt
-        run: pipenv requirements > infrastructure/requirements.txt
+#       - name: Set up Python 3.13
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: 3.13
+#           cache: pip
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Set up Python
+        run: uv python install
+      - name: Install the project
+        run: uv sync --all-extras --dev
+      - name: uv to requirements.txt
+        run: uv export --project pyproject.toml --no-emit-project > infrastructure/requirements.txt
       - name: cdk diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
