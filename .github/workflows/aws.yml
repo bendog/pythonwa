@@ -11,7 +11,7 @@ on:
 
 jobs:
   deployment:
-    if: github.event.pull_request.merged == true || github.event_name == 'push'
+    if: (github.event.pull_request.merged == true && github.ref == 'refs/heads/main') || github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: PythonWA AWS
     steps:
