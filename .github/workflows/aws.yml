@@ -40,7 +40,7 @@ jobs:
         with:
           python-version-file: "pyproject.toml"
       - name: Install the project
-        run: uv sync --all-extras --dev
+        run: uv sync --all-extras --dev --python-preference only-system
       - name: uv to requirements.txt
         run: uv export --project pyproject.toml --no-emit-project > infrastructure/requirements.txt
       - name: cdk diff
