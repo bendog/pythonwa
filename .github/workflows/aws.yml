@@ -28,44 +28,49 @@ jobs:
       - name: npm build
         working-directory: ./frontend
         run: npm run build
-#       - name: Set up Python 3.13
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: 3.13
-#           cache: pip
       - name: Install uv
         uses: astral-sh/setup-uv@v5
       - name: "Set up Python"
         uses: actions/setup-python@v5
         with:
           python-version-file: "pyproject.toml"
+      - name: ensure pip
+        run: python -m ensurepip --upgrade
+      - name: which pip
+        run: which pip
       - name: Install the project
         run: uv sync --all-extras --dev --python-preference only-system
       - name: uv to requirements.txt
         run: uv export --project pyproject.toml --no-emit-project --no-hashes > ./infrastructure/requirements.txt
       - name: check requirements
         run: cat infrastructure/requirements.txt
-      - name: cdk diff
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'diff'
-          cdk_stack: '--all'
-          working_dir: './infrastructure'
-          actions_comment: true
+      - name: install requirements
+        run: pip install -U -r infrastructure/requirements.txt
+      - name: check pip freeze
+        run: pip freeze
+      - name: install cdk
+        run: npm install -g aws-cdk
+      - name: cdk synth
+        run: cdk synth
+        working-directory: ./infrastructure
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYTHON_WA_API_KEY: ${{ secrets.PYTHON_WA_API_KEY }}
-      - name: deploy
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'deploy'
-          cdk_stack: '--all'
-          cdk_args: '--require-approval never'
-          working_dir: './infrastructure'
-          actions_comment: false
+      - name: cdk diff
+        run: cdk diff --all
+        working-directory: ./infrastructure
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PYTHON_WA_API_KEY: ${{ secrets.PYTHON_WA_API_KEY }}
+      - name: cdk deploy
+        run: cdk deploy --all --require-approval never
+        working-directory: ./infrastructure
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PYTHON_WA_API_KEY: ${{ secrets.PYTHON_WA_API_KEY }}
