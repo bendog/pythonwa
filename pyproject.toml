@@ -24,6 +24,9 @@ dev = [
     "segno~=1.6.1",
     "qrcode-artistic~=3.0.2",
     "pillow>=10.3.0",
+    "pytest>=8.3.4",
+    "coverage>=7.6.12",
+    "moto[ssm]>=5.0.28",
 ]
 
 [tool.uv.sources]
