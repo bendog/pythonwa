@@ -8,6 +8,7 @@ from aws_lambda_typing import context as lambda_context
 from aws_lambda_typing import events
 from cache_util import ttl_cache
 from meetup_models import GroupByQuery, GroupEventsEdgeNode
+from pythonwa_models import PythonWAEvent, PythonWAEvents, PythonWAVenue
 
 logger = logging.getLogger(__name__)
 
@@ -55,9 +56,9 @@ def convert_markdown(md_text: str) -> str:
 
 
 @ttl_cache(maxsize=128, ttl=15 * 60)
-def talks_future() -> list[dict[str, str]]:
+def talks_future() -> str:
     """Get list of future talks"""
-    events_list = []
+    events_list: PythonWAEvents = PythonWAEvents([])
     query: dict[str, str] = {
         "query": """query ($urlname: String!) {
           groupByUrlname(urlname: $urlname) {
@@ -107,23 +108,23 @@ def talks_future() -> list[dict[str, str]]:
         ]
         node_list.sort(key=lambda d: d.date_time)
         for event in node_list:
-            venue_text: str = (
-                f"{event.venues[0].name} ({event.venues[0].address} {event.venues[0].city})"
+            venue: PythonWAVenue = (
+                PythonWAVenue(**event.venues[0].model_dump())
                 if event.venues
-                else "Venue TBC"
+                else PythonWAVenue(name="TBC")
             )
-            events_list.append(
-                {
-                    "name": event.title,
-                    "time": event.date_time.isoformat(),
-                    "venue": venue_text,
-                    "attendance": event.rsvps.yes_count,
-                    "description": convert_markdown(event.description),
-                    "link": str(event.event_url),
-                }
+            events_list.root.append(
+                PythonWAEvent(
+                    name=event.title,
+                    date_time=event.date_time,
+                    venue=venue,
+                    attendance=event.rsvps.yes_count,
+                    description=convert_markdown(event.description),
+                    link=str(event.event_url),
+                )
             )
-    logger.info(f"{len(events_list)=}")
-    return events_list
+    logger.info(f"{len(events_list.root)=}")
+    return events_list.model_dump_json(indent=2)
 
 
 def handler(event: events.APIGatewayProxyEventV1, context: lambda_context):
@@ -131,12 +132,12 @@ def handler(event: events.APIGatewayProxyEventV1, context: lambda_context):
         logger.info(event)
         # data: dict = json.loads(event["body"])
 
-        response_body: list[dict] = talks_future()
+        response_body: str = talks_future()
         logger.info(response_body)
         return {
             "statusCode": 200,
             "headers": DEFAULT_HEADERS,
-            "body": json.dumps(response_body),
+            "body": response_body,
         }
     except Exception as e:
         return {
@@ -148,5 +149,4 @@ def handler(event: events.APIGatewayProxyEventV1, context: lambda_context):
 
 if __name__ == "__main__":
     resp = talks_future()
-    for x in resp:
-        print(json.dumps(x, indent=2))
+    print(resp)

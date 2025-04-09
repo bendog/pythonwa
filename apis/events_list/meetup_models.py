@@ -1,7 +1,4 @@
-from datetime import datetime
-
-from pydantic import BaseModel, ConfigDict, alias_generators
-from pydantic_core import Url
+from pydantic import AwareDatetime, BaseModel, ConfigDict, HttpUrl, alias_generators
 
 
 class MeetupBaseModel(BaseModel):
@@ -24,10 +21,10 @@ class GroupEventsEdgeNode(MeetupBaseModel):
     status: str
     title: str
     description: str
-    date_time: datetime
+    date_time: AwareDatetime
     duration: str
-    end_time: datetime
-    event_url: Url
+    end_time: AwareDatetime
+    event_url: HttpUrl
     venues: list[Venue]
     rsvps: RSVPS
 
