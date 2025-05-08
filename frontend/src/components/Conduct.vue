@@ -8,7 +8,9 @@
             <a class="text-blue-700" href="https://policies.python.org/python.org/code-of-conduct" target="_blank">
                 Python Software Foundation Code of Conduct
             </a> 
-            that applies to our events, Slack channel and all associated activities.
+            that applies to all of our events, Slack channel and associated activities. To anonymously report a violation of the code of conduct to our team, please complete 
+            <a class="text-blue-700" href="https://forms.gle/gruSUT8bXyJj1nz98" target="blank">this form</a>. Alternatively, please reach out to our PSF community  
+            <a class="text-blue-700" href="https://www.linkedin.com/in/nathan-bransby/" target="blank">CoC representative</a>.      
         </p>
       </div>
     </section>
