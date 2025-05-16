@@ -238,6 +238,9 @@ class StaticSitePublicS3(StaticSite):
             origin_headers={"Referer": self.__origin_referer_header},
         )
 
+        # TODO: need to update this to use the new distribution method.
+        #   https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_cloudfront/Distribution.html
+
         self.distribution = cloudfront.CloudFrontWebDistribution(
             self,
             "cloudfront_distribution",

@@ -28,7 +28,6 @@ function pythonwaqr() {
 ```bash
 cd frontend
 npm run build
-git add dist
 cd ..
 cd infrastructure
 cdk synth && cdk deploy --all
