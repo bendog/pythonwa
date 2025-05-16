@@ -1,10 +1,10 @@
 import json
 import logging
 
-from aws_lambda_typing import context as lambda_context, events
-
 import boto3
 import requests
+from aws_lambda_typing import context as lambda_context
+from aws_lambda_typing import events
 
 DEFAULT_HEADERS = {
     "Access-Control-Allow-Headers": "*",

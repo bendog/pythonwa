@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import aws_cdk as cdk
-
 from stacks.serverless_backend_stack import ServerlessBackendStack
 from stacks.static_site import StaticWebStack
 

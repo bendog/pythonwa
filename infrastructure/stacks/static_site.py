@@ -1,3 +1,4 @@
+# ruff: noqa: F841 - ignore unused variables
 """
 Two constructs to host static sites in aws using S3, cloudfront and Route53.
 StaticSitePrivateS3 creates a private S3 bucket and uses S3 API endpoint as
@@ -6,21 +7,41 @@ StaticSitePublicS3 creates a public S3 bucket with website enabled and
 uses Origin Custom Header (referer) to limit the access of s3 objects to the
 CloudFront only.
 """
+
+from pathlib import Path
+
 from aws_cdk import (
-    aws_s3 as s3,
-    aws_s3_deployment as s3_deployment,
-    aws_cloudfront as cloudfront,
-    aws_cloudfront_origins as origins,
-    aws_certificatemanager as acm,
-    aws_route53 as route53,
-    aws_route53_targets as targets,
-    aws_iam as iam,
-    aws_ssm as ssm,
     RemovalPolicy,
     Stack,
 )
+from aws_cdk import (
+    aws_certificatemanager as acm,
+)
+from aws_cdk import (
+    aws_cloudfront as cloudfront,
+)
+from aws_cdk import (
+    aws_cloudfront_origins as origins,
+)
+from aws_cdk import (
+    aws_iam as iam,
+)
+from aws_cdk import (
+    aws_route53 as route53,
+)
+from aws_cdk import (
+    aws_route53_targets as targets,
+)
+from aws_cdk import (
+    aws_s3 as s3,
+)
+from aws_cdk import (
+    aws_s3_deployment as s3_deployment,
+)
+from aws_cdk import (
+    aws_ssm as ssm,
+)
 from constructs import Construct
-from pathlib import Path
 
 STACKS_PATH = Path(__file__).resolve().parent
 PROJECT_ROOT = STACKS_PATH.parent.parent
@@ -301,6 +322,7 @@ class StaticWebStack(Stack):
             hosted_zone_name=hosted_zone_name,
         )
 
+        # noinspection PyUnusedLocal
         redirect = RedirectSitePublicS3(
             self,
             f"{construct_id}-RedirectSitePublicS3",
@@ -311,6 +333,7 @@ class StaticWebStack(Stack):
             hosted_zone_name=hosted_zone_name,
         )
 
+        # noinspection PyUnusedLocal
         files = s3_deployment.BucketDeployment(
             self,
             f"{construct_id}-BucketDeployment",

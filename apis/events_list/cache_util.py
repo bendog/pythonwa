@@ -1,7 +1,7 @@
-from functools import lru_cache, update_wrapper
-from typing import Callable, Any
-from math import floor
 import time
+from functools import lru_cache, update_wrapper
+from math import floor
+from typing import Any, Callable
 
 
 def ttl_cache(maxsize: int = 128, typed: bool = False, ttl: int = -1):
